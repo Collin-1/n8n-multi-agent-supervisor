@@ -1,0 +1,238 @@
+{
+  "name": "Email Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -144,
+        -64
+      ],
+      "id": "d181188c-0382-4c4f-8bd7-5a0cebbd482d",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.query }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        336,
+        -64
+      ],
+      "id": "8384d6da-9bfa-41f3-a804-66d5dc6458c8",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message_ID', ``, 'string') }}"
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        576,
+        224
+      ],
+      "id": "47609d84-9b07-444b-b86b-52e748f167f7",
+      "name": "Get",
+      "webhookId": "23cab367-2fde-469c-90c0-7422b3e3029a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "MXhLUFZYryFdG29X",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        336,
+        224
+      ],
+      "id": "b6807360-0fff-4522-a06e-d8f279c0b0df",
+      "name": "Send",
+      "webhookId": "226ae793-e628-45cc-82e8-ac231523372d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "MXhLUFZYryFdG29X",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "simple": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Simplify', ``, 'boolean') }}",
+        "filters": {
+          "readStatus": "unread"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        464,
+        224
+      ],
+      "id": "9b69638b-7f79-425b-bc23-d9594b0ee96f",
+      "name": "Search",
+      "webhookId": "3cee156b-6a90-42a8-a594-cfa521b967c5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "MXhLUFZYryFdG29X",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "reply",
+        "messageId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message_ID', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        704,
+        224
+      ],
+      "id": "90d8b0c6-c497-4037-b756-721f55a83a43",
+      "name": "Reply",
+      "webhookId": "f967c0e5-c3c5-4934-8d65-3b6e6da10444",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "MXhLUFZYryFdG29X",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        128,
+        240
+      ],
+      "id": "41c61e16-44fe-45f9-bdc9-52f446d701a7",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "KqXDeFBkmTViiBWU",
+          "name": "Groq account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "query": "send a message to collin.makwala@umuzi.org asking him if he is free on friday."
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reply": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "972875f1-ae7c-4261-859e-edf9bf9112d8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b1b8e116456025af12e06b62afc114a183171a34b6c56361b59ae4a1b7965f0d"
+  },
+  "id": "WSUWdCMGPe5TAw44",
+  "tags": []
+}
