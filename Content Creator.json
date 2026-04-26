@@ -1,0 +1,100 @@
+{
+  "name": "Content Creator",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        96
+      ],
+      "id": "a5b97b10-3cb0-4769-8ed6-5a6b7ca60110",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.query }}",
+        "options": {
+          "systemMessage": "You are an expert content creator.\nCreate SEO optimized content based on the user's query."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        224,
+        96
+      ],
+      "id": "4c292a5f-e7b3-4fae-a28b-c49dd5c80287",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        96,
+        304
+      ],
+      "id": "a2789dfd-b2c5-4423-907e-cdac2262998f",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "KqXDeFBkmTViiBWU",
+          "name": "Groq account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "query": "Create a twitter post promoting my new Youtube tutorial on creating n8n AI Agents"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "478b8083-0cd8-4806-82bf-15e09494c496",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b1b8e116456025af12e06b62afc114a183171a34b6c56361b59ae4a1b7965f0d"
+  },
+  "id": "ODqSlvCvA6AGnL14",
+  "tags": []
+}
