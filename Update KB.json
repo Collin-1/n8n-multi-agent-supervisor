@@ -1,0 +1,162 @@
+{
+  "name": "Update KB",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Load files into KB",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "File",
+              "fieldType": "file"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        272,
+        64
+      ],
+      "id": "bc22f2a9-5ec5-4d59-a889-231cd85ceedd",
+      "name": "On form submission",
+      "webhookId": "d73053bf-63df-49be-ba0c-6671af33a4bb"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "n8n-tutorial",
+          "mode": "list",
+          "cachedResultName": "n8n-tutorial"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1,
+      "position": [
+        496,
+        64
+      ],
+      "id": "77d862e0-ad02-4101-9b2d-2a0ac545e2f4",
+      "name": "Pinecone Vector Store",
+      "credentials": {
+        "pineconeApi": {
+          "id": "RlBIchBTTEinb8M0",
+          "name": "PineconeApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1,
+      "position": [
+        640,
+        272
+      ],
+      "id": "a8c4ba74-6fb1-419c-b9ed-fbd45b4f4d6a",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "chunkSize": 2000,
+        "chunkOverlap": 200,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        672,
+        432
+      ],
+      "id": "0054322a-b4c1-41a5-9940-9c0382411b98",
+      "name": "Recursive Character Text Splitter"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        416,
+        272
+      ],
+      "id": "d5d23861-65c8-4728-8bb6-9e51c910c8bb",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "G8xHb3nyzEzkI7BL",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "c7228484-a5bf-4cc7-9d2f-414edd97d5a4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b1b8e116456025af12e06b62afc114a183171a34b6c56361b59ae4a1b7965f0d"
+  },
+  "id": "xYfpC5k7RTKQREkj",
+  "tags": []
+}
